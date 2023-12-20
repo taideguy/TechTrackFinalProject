@@ -1,0 +1,933 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+    <h2>Admin Editor</h2>
+    <br>
+
+    <div class="student_added">
+        {% include 'student_added_info_flash.html' %}
+    </div>
+    
+
+    <div class="student_deleted">
+        {% include 'student_deleted_flash.html' %}
+    </div>
+
+    <div class="student_not_found">
+        {% include 'student_not_found_error_flash.html' %}
+    </div>
+    
+    <div class="adminButton">
+        <form method="post" action="/go-admin">
+            <input type="submit" id="adminButton" value="Admin" class="btn btn-primary" name="button" size="10px">
+        </form>
+    </div>
+
+    <div class="backButton">
+        <input type="submit" id="backButton" value="Back" onclick="goBack()" class="btn btn-primary" name="button" size="10px">
+    </div>
+    
+    
+    <div class="homeButton">
+        <form method="post" action="/go-home">
+            <input type="submit" id="homeButton" value="Home" class="btn btn-primary" name="button" size="10px">
+        </form>
+    </div>
+
+
+    
+    <div class="searchItems">
+        <div id="categorySelector" class="form-group">
+            <input type="button" value="Students" class="btn btn-primary" onclick="showStudentsForm()">
+            <input type="button" value="Employees"class="btn btn-primary" onclick="showEmployeesForm()">
+            <input type="button" value="Users" class="btn btn-primary" onclick="showUsersForm()">
+            <input type="button" value="Classes" class="btn btn-primary" onclick="showClassesForm()">
+            <input type="button" value="Enrollments" class="btn btn-primary" onclick="showEnrollmentsForm()">
+        </div>
+    </div>
+
+
+<!-- Edit Selection ------------------------------------------------------------ -->
+
+
+ <!-- Form for Editing Students -->
+ <div class="actionDropdown" id="editStudentsForm" style="display: none;">
+    <label>Select Action Category:</label>
+    <select class="actionChooseDropdown" id="studentCategorySelector2" onchange="showStudentsForm()">
+        <option value="blank"></option>
+        <option value="add">Add</option>
+        <option value="delete">Delete</option>
+    </select>
+</div>
+
+
+
+ <!-- Form for Editing Employees -->
+ <div class="actionDropdown" id="editEmployeesForm" style="display: none;">
+    <label>Select Action Category:</label>
+    <select class="actionChooseDropdown" id="employeeCategorySelector2" onchange="showEmployeesForm()">
+        <option value="blank"></option>
+        <option value="add">Add</option>
+        <option value="delete">Delete</option>
+    </select>
+</div>
+
+
+
+<!-- Form for Editing Users -->
+<div class="actionDropdown" id="editUsersForm" style="display: none;">
+        <form method="post">
+            <label>Select Action Category:</label>
+    <select class="actionChooseDropdown" id="userCategorySelector2" onchange="showUsersForm()">
+        <option value="blank"></option>
+        <option value="delete">Delete</option>
+    </select>
+        </form>
+</div>
+
+<!-- Form for Editing Classes -->
+<div class="actionDropdown" id="editClassesForm" style="display: none;">
+    <form method="post">
+        <label>Select Action Category:</label>
+    <select class="actionChooseDropdown" id="classCategorySelector2" onchange="showClassesForm()">
+        <option value="blank"></option>
+        <option value="add">Add</option>
+        <option value="delete">Delete</option>
+    </select>
+    </form>
+</div>
+
+<!-- Form for Editing Enrollments -->
+<div class="actionDropdown" id="editEnrollmentsForm" style="display: none;">
+    <form method="post">
+        <label>Select Action Category:</label>
+    <select class="actionChooseDropdown" id="enrollmentCategorySelector2" onchange="showEnrollmentsForm()">
+        <option value="blank"></option>
+        <option value="add">Add</option>
+        <option value="delete">Delete</option>
+    </select>
+    </form>
+</div>
+
+
+
+
+<!-- Action Selection ------------------------------------------------------------ -->
+
+
+<!-- Form for Deleting Students -->
+<div class="deleteStudent" id="deleteStudentsForm" style="display: none;">
+    <h3 class="actionTitle">Delete Student</h3>
+    <form method="post" action="/delete_students">
+        <div class="form-group" >
+        <select id="deleteStudentSelector" class="deleteStudentSelector" name="student_id">
+            {% for student in student_data %}
+                <option value="{{ student.student_id }}">{{ student.first_name + " " + student.last_name }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" id="deleteStudentButton" class="btn btn-primary" value="Confirm" name="button" size="10px">
+        </div>
+    </form>
+
+</div>
+
+<!-- Form for Deleting Employees -->
+<div class="deleteEmployee" id="deleteEmployeesForm" style="display: none;">
+    <h3 class="actionTitle">Delete Employee</h3>
+    <div class="employee_form">
+        <form method="post" action="/delete_employees">
+            <select class="deleteEmployeeSelector" name="employee_id">
+                {% for employee in employee_data %}
+                    <option value="{{ employee.employee_id }}">{{ employee.first_name + " " + employee.last_name }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" id="deleteEmployeeButton" class="btn btn-primary" value="Confirm" name="button" size="10px">
+        </form>
+    
+    </div>
+</div>
+
+<!-- Form for Deleting Users -->
+<div class="deleteUser" id="deleteUsersForm" style="display: none;">
+    <h3 class="actionTitle">Delete User</h3>
+        <form method="post" action="/delete_users">
+            <div class="form-group">
+                <select class= "deleteUserSelector" name="user_id">
+                    {% for user in user_data %}
+                            <option value="{{ user.user_id }}">{{ user.first_name + " " + user.last_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <input type="submit" id="deleteUserButton" class="btn btn-primary" value="Confirm" name="button" size="10px">     
+        </form> 
+</div>
+
+<!-- Form for Deleting Classes -->
+<div class="deleteClass" id="deleteClassesForm" style="display: none;">
+    <h3 class="actionTitle">Delete Class</h3>
+        <form method="post" action="/delete_classes">
+                <select class="deleteClassSelector" name="class_id">
+                    {% for class in class_data %}
+                        <option value="{{ class.class_id }}">{{ class.class_name }}</option>
+                    {% endfor %}
+                </select>
+            <br>
+            <br>
+            <input type="submit" id="deleteClassButton" class="btn btn-primary" value="Confirm" name="button" size="10px">
+        </form> 
+</div>
+
+<!-- Form for Deleting Enrollments -->
+<div class="deleteEnrollment" id="deleteEnrollmentsForm" style="display: none;">
+    <h3 class="actionTitle">Delete Student Enrollment</h3>
+    <div class="enrollment_form">
+            <form method=post action="/delete_enrollments">
+                <select class="deleteEnrollmentSelector" name="student_id">
+                    {% for student in student_data %}
+                        <option value="{{ student.student_id }}">{{ student.first_name + " " + student.last_name }}</option>
+                    {% endfor %}
+                </select>
+                <input type="submit" id="deleteEnrollmentButton" class="btn btn-primary" value="Confirm" name="delete_button2" size="10px">
+            </form>
+            <br>
+    </div>
+</div>
+
+
+<!-- Form for Adding Students -->
+<div class="addStudent" id="addStudentsForm" style="display: none;">
+    <h3 class="actionTitle">Add Student</h3>
+    <form method="post" action="/add_students">
+        <div class="first_name">
+            <div class="form-group">
+                <label for="first_name">First Name:</label>
+                <input type="first_name" class="form-control" name="first_name" >
+                <br>
+            </div>
+        </div>
+        
+        <div class="last_name">
+            <div class="form-group">
+                <label for="last_name">Last Name:</label>
+                <input type="last_name" class="form-control" name="last_name" >
+                <br>
+            </div>
+        </div>
+        
+        <div class="grade">
+            <label>Grade:</label>
+            <select id="studentGradeSelector" name="grade">
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>
+            <br>
+            <br>
+        </div>
+        
+        <div>
+
+        </div class="age">
+            <label>Age:</label>
+            <select id="studentAgeSelector" name="age">
+                <option value="16">16</option>
+                <option value="17">17</option>
+                <option value="18">18</option>
+            </select>
+        <br>
+        <br>
+        <input type="submit" class="btn btn-primary" value="Confirm" name="button" size="10px">
+    </form>
+</div>
+
+
+
+<!-- Form for Adding Employees -->
+<div class="addEmployee" id="addEmployeesForm" style="display: none;">
+    <h3 class="action Title">Add Employee</h3>
+    <form method="post" action="/add_employees">
+        <div class="first_name">
+            <div class="form-group">
+                <label for="first_name">First Name:</label>
+                <input type="first_name" class="form-control" name="first_name" >
+                <br>
+                
+            </div>
+        </div>
+        
+        <div class="last_name">
+            <div class="form-group">
+                <label for="last_name">Last Name</label>
+                <input type="last_name" class="form-control" name="last_name" >
+                <br>
+                <br>
+            </div>
+        </div>
+
+        <div class="job">
+            <label>Job:</label>
+            <select id="employeeJobSelector" name="job">
+                <option value="teacher">Teacher</option>
+            </select>
+            <br>
+            <br>
+        </div>
+
+       
+        
+        <input type="submit" class="btn btn-primary" value="Confirm" name="button" size="10px">
+    </form>
+
+    <!-- add "employee added" alert -->
+</div>
+
+
+    <!-- Form for Adding Classes -->
+<div class="addClass" id="addClassesForm" style="display: none;">
+    <h3 class="actionTitle">Add Class</h3>
+    <form method="post" action="/add_classes">
+        <div class="class_name">
+            <div class="form-group">
+                <label for="class_name">Class Name:</label>
+                <input type="class_name" class="form-control" name="class_name" >
+                <br>
+            </div>
+        </div>
+
+        <div class="room_number">
+            <div class="form-group">
+                <label for="room_number">Room Number:</label>
+                <input type="room_number" class="form-control" name="room_number" >
+                <br>
+            </div>
+        </div>
+
+        <div class="addClassPeriodSelector">
+            <label>Period:</label>
+            <br>
+            <select class="classPeriodSelector" name="class_period">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+        </select>
+        </div>
+        
+        <div class="addClassEmployeeSelector">
+            <label>Teacher:</label>
+            <br>
+            <select class="classEmployeeSelector" name="employee_id">
+                {% for employee in employee_data %}
+                    <option value="{{ employee.employee_id }}">{{ employee.first_name + ' ' + employee.last_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <input type="submit" id="addClassButton" class="btn btn-primary" value="Confirm" name="button" size="10px">
+    </form>
+
+    <!-- add "student added" alert -->
+</div>
+
+
+<!-- Form for Adding Enrollments -->
+<div class="addEnrollment" id="addEnrollmentsForm" style="display: none;">
+    <h3 class="actionTitle">Add Student Enrollment</h3>
+    <form method="post" action="/add_enrollments">
+        <label>Student Name:</label>
+            <select class="chooseStudentSelector" name="student_id">
+                {% for student in student_data %}
+                    <option value="{{ student.student_id | int }}">{{ student.first_name + " " + student.last_name }}</option>
+                {% endfor %}
+            </select>
+            <br>
+            <br>
+        <label>Class Name:</label>
+            <select class="chooseClassSelector" name="class_id"> 
+            {% for class in class_data %}
+                <option value="{{ class.class_id | int }}">{{ class.class_name }}</option>
+            {% endfor %}
+            </select>
+            <br>
+            <br>
+        <input type="submit" id="addEnrollmentButton" class="btn btn-primary" value="Confirm" name="button" size="10px">
+    </form>
+</div>
+
+
+<script>
+
+
+
+    function showStudentsForm() {
+
+        editStudentsForm.style.display = "block";
+        editEmployeesForm.style.display = "none";
+        editUsersForm.style.display = "none";
+        editClassesForm.style.display = "none";
+        editEnrollmentsForm.style.display = "none";
+    
+        var addStudentsForm = document.getElementById("addStudentsForm");
+        var deleteStudentsForm = document.getElementById("deleteStudentsForm");
+        var addEmployeesForm = document.getElementById("addEmployeesForm");
+        var deleteEmployeesForm = document.getElementById("deleteEmployeesForm");
+        var deleteUsersForm = document.getElementById("deleteUsersForm");
+        var addClassesForm = document.getElementById("addClassesForm");
+        var deleteClassesForm = document.getElementById("deleteClassesForm");
+        var addEnrollmentsForm = document.getElementById("addEnrollmentsForm");
+        var deleteEnrollmentsForm = document.getElementById("deleteEnrollmentsForm");
+        
+        
+        
+    
+        addStudentsForm.style.display = "none";
+        deleteStudentsForm.style.display = "none";
+
+        addEmployeesForm.style.display = "none";
+        deleteEmployeesForm.style.display = "none";
+
+        deleteUsersForm.style.display = "none";
+
+        addClassesForm.style.display = "none";
+        deleteClassesForm.style.display = "none";
+
+        addEnrollmentsForm.style.display = "none";
+        deleteEnrollmentsForm.style.display = "none";
+        
+    
+        var studentCategorySelector2 = document.getElementById("studentCategorySelector2");
+        
+    
+        var studentSelectedCategory2 = studentCategorySelector2.value;
+    
+    
+        // show respective view All/Specific forms
+        if (getComputedStyle(editStudentsForm).display === "block") {  
+            if (studentSelectedCategory2 === "add") { 
+                addStudentsForm.style.display = "block";
+                console.log("student >>>>" + studentSelectedCategory2);
+                console.log("student >>>>" + addStudentsForm.style.display);
+            } else if (studentSelectedCategory2 === "delete") { 
+                deleteStudentsForm.style.display = "block";
+                console.log("student >>>>" + studentSelectedCategory2);
+                console.log("student >>>>" + deleteStudentsForm.style.display);
+            }
+    }}
+
+
+    function showEmployeesForm() {
+
+        editStudentsForm.style.display = "none";
+        editEmployeesForm.style.display = "block";
+        editUsersForm.style.display = "none";
+        editClassesForm.style.display = "none";
+        editEnrollmentsForm.style.display = "none";
+    
+        var addStudentsForm = document.getElementById("addStudentsForm");
+        var deleteStudentsForm = document.getElementById("deleteStudentsForm");
+        var addEmployeesForm = document.getElementById("addEmployeesForm");
+        var deleteEmployeesForm = document.getElementById("deleteEmployeesForm");
+        var deleteUsersForm = document.getElementById("deleteUsersForm");
+        var addClassesForm = document.getElementById("addClassesForm");
+        var deleteClassesForm = document.getElementById("deleteClassesForm");
+        var addEnrollmentsForm = document.getElementById("addEnrollmentsForm");
+        var deleteEnrollmentsForm = document.getElementById("deleteEnrollmentsForm");
+        
+        
+        
+    
+        addStudentsForm.style.display = "none";
+        deleteStudentsForm.style.display = "none";
+
+        addEmployeesForm.style.display = "none";
+        deleteEmployeesForm.style.display = "none";
+
+        deleteUsersForm.style.display = "none";
+
+        addClassesForm.style.display = "none";
+        deleteClassesForm.style.display = "none";
+        
+        addEnrollmentsForm.style.display = "none";
+        deleteEnrollmentsForm.style.display = "none";
+
+        var employeeCategorySelector2 = document.getElementById("employeeCategorySelector2");
+        
+    
+        var employeeSelectedCategory2 = employeeCategorySelector2.value;
+    
+    
+        // show respective view All/Specific forms
+        if (getComputedStyle(editEmployeesForm).display === "block") {  
+            if (employeeSelectedCategory2 === "add") { 
+                addEmployeesForm.style.display = "block";
+                console.log("employee >>>>" + employeeSelectedCategory2);
+                console.log("employee >>>>" + addEmployeesForm.style.display);
+            } else if (employeeSelectedCategory2 === "delete") { 
+                deleteEmployeesForm.style.display = "block";
+                console.log("employee >>>>" + employeeSelectedCategory2);
+                console.log("employee >>>>" + deleteEmployeesForm.style.display);
+            }
+    }}
+
+
+    function showUsersForm() {
+
+        editStudentsForm.style.display = "none";
+        editEmployeesForm.style.display = "none";
+        editUsersForm.style.display = "block";
+        editClassesForm.style.display = "none";
+        editEnrollmentsForm.style.display = "none";
+    
+        var addStudentsForm = document.getElementById("addStudentsForm");
+        var deleteStudentsForm = document.getElementById("deleteStudentsForm");
+        var addEmployeesForm = document.getElementById("addEmployeesForm");
+        var deleteEmployeesForm = document.getElementById("deleteEmployeesForm");
+        var deleteUsersForm = document.getElementById("deleteUsersForm");
+        var addClassesForm = document.getElementById("addClassesForm");
+        var deleteClassesForm = document.getElementById("deleteClassesForm");
+        var addEnrollmentsForm = document.getElementById("addEnrollmentsForm");
+        var deleteEnrollmentsForm = document.getElementById("deleteEnrollmentsForm");
+        
+        
+        
+    
+        addStudentsForm.style.display = "none";
+        deleteStudentsForm.style.display = "none";
+
+        addEmployeesForm.style.display = "none";
+        deleteEmployeesForm.style.display = "none";
+
+        deleteUsersForm.style.display = "none";
+
+        addClassesForm.style.display = "none";
+        deleteClassesForm.style.display = "none";
+        
+        addEnrollmentsForm.style.display = "none";
+        deleteEnrollmentsForm.style.display = "none";
+    
+        var userCategorySelector2 = document.getElementById("userCategorySelector2");
+        
+    
+        var userSelectedCategory2 = userCategorySelector2.value;
+    
+    
+        // show respective view All/Specific forms
+        if (getComputedStyle(editUsersForm).display === "block") {  
+            if (userSelectedCategory2 === "delete") { 
+                deleteUsersForm.style.display = "block";
+                console.log("user >>>>" + userSelectedCategory2);
+                console.log("user >>>>" + deleteUsersForm.style.display);
+            }
+    }}
+
+    function showClassesForm() {
+
+        editStudentsForm.style.display = "none";
+        editEmployeesForm.style.display = "none";
+        editUsersForm.style.display = "none";
+        editClassesForm.style.display = "block";
+        editEnrollmentsForm.style.display = "none";
+    
+        var addStudentsForm = document.getElementById("addStudentsForm");
+        var deleteStudentsForm = document.getElementById("deleteStudentsForm");
+        var addEmployeesForm = document.getElementById("addEmployeesForm");
+        var deleteEmployeesForm = document.getElementById("deleteEmployeesForm");
+        var deleteUsersForm = document.getElementById("deleteUsersForm");
+        var addClassesForm = document.getElementById("addClassesForm");
+        var deleteClassesForm = document.getElementById("deleteClassesForm");
+        var addEnrollmentsForm = document.getElementById("addEnrollmentsForm");
+        var deleteEnrollmentsForm = document.getElementById("deleteEnrollmentsForm");
+        
+        
+        
+    
+        addStudentsForm.style.display = "none";
+        deleteStudentsForm.style.display = "none";
+
+        addEmployeesForm.style.display = "none";
+        deleteEmployeesForm.style.display = "none";
+
+        deleteUsersForm.style.display = "none";
+
+        addClassesForm.style.display = "none";
+        deleteClassesForm.style.display = "none";
+        
+        addEnrollmentsForm.style.display = "none";
+        deleteEnrollmentsForm.style.display = "none";
+
+        var classCategorySelector2 = document.getElementById("classCategorySelector2");
+        
+    
+        var classSelectedCategory2 = classCategorySelector2.value;
+
+        
+    
+    
+        // show respective view All/Specific forms
+        if (getComputedStyle(editClassesForm).display === "block") {  
+            if (classSelectedCategory2 === "add") { 
+                addClassesForm.style.display = "block";
+                console.log("class >>>>" + classSelectedCategory2);
+                console.log("class >>>>" + addClassesForm.style.display);
+            } else if (classSelectedCategory2 === "delete") { 
+                deleteClassesForm.style.display = "block";
+                console.log("class >>>>" + classSelectedCategory2);
+                console.log("class >>>>" + deleteClassesForm.style.display);
+            }
+    }}
+
+    function showEnrollmentsForm() {
+
+        editStudentsForm.style.display = "none";
+        editEmployeesForm.style.display = "none";
+        editUsersForm.style.display = "none";
+        editClassesForm.style.display = "none";
+        editEnrollmentsForm.style.display = "block";
+    
+        var addStudentsForm = document.getElementById("addStudentsForm");
+        var deleteStudentsForm = document.getElementById("deleteStudentsForm");
+        var addEmployeesForm = document.getElementById("addEmployeesForm");
+        var deleteEmployeesForm = document.getElementById("deleteEmployeesForm");
+        var deleteUsersForm = document.getElementById("deleteUsersForm");
+        var addClassesForm = document.getElementById("addClassesForm");
+        var deleteClassesForm = document.getElementById("deleteClassesForm");
+        var addEnrollmentsForm = document.getElementById("addEnrollmentsForm");
+        var deleteEnrollmentsForm = document.getElementById("deleteEnrollmentsForm");
+        
+        
+        
+    
+        addStudentsForm.style.display = "none";
+        deleteStudentsForm.style.display = "none";
+
+        addEmployeesForm.style.display = "none";
+        deleteEmployeesForm.style.display = "none";
+
+        deleteUsersForm.style.display = "none";
+
+        addClassesForm.style.display = "none";
+        deleteClassesForm.style.display = "none";
+
+        addEnrollmentsForm.style.display = "none";
+        deleteEnrollmentsForm.style.display = "none";
+        
+    
+        var enrollmentCategorySelector2 = document.getElementById("enrollmentCategorySelector2");
+        
+    
+        var enrollmentSelectedCategory2 = enrollmentCategorySelector2.value;
+    
+    
+        // show respective view All/Specific forms
+        if (getComputedStyle(editEnrollmentsForm).display === "block") {  
+            if (enrollmentSelectedCategory2 === "add") { 
+                addEnrollmentsForm.style.display = "block";
+                console.log("enrollment >>>>" + enrollmentSelectedCategory2);
+                console.log("enrollment >>>>" + addEnrollmentsForm.style.display);
+            } else if (enrollmentSelectedCategory2 === "delete") { 
+                deleteEnrollmentsForm.style.display = "block";
+                console.log("enrollment >>>>" + enrollmentSelectedCategory2);
+                console.log("enrollment >>>>" + deleteEnrollmentsForm.style.display);
+            }
+    }}
+    
+</script>
+
+
+<style>
+
+    #homeButton, #backButton, #adminButton {
+        width: 60%;
+        justify-content: center;
+        background-color: #515151;
+    }
+    
+    
+    .homeButton, .backButton, .adminButton {
+        width: 300%;
+        padding: 10px;
+        max-width: 10%;
+        border-radius: 20px;
+        margin-left: 20%;
+    }
+    
+    .backButton {
+        margin-left: 26%;
+        margin-bottom: -3.3%;
+    }
+
+    .adminButton {
+        margin-left: 32%;
+        margin-bottom: -3.3%;
+    }
+
+    .searchItems {
+        text-align  : center;
+        align-items: center;
+        max-width: 60%;
+        max-height: 120px;
+        margin: 0 auto; /* Add this line to center the form horizontally */
+        padding: 30px;
+        background-color: #a1aeba;
+        border-radius: 10px;
+        background-color: lightgray;
+    }
+
+    .actionDropdown {
+        text-align: center;
+        align-items: center;
+        max-width: 60%;
+        max-height: 120px;
+        margin: 10px auto; /* Add this line to center the form horizontally */
+        padding: 10px;
+        background-color: #a1aeba;
+        border-radius: 10px;
+        background-color: lightgray;
+    }
+
+    .actionChooseDropdown {
+        border-radius: 5px;
+    }
+
+    .actionTitle {
+        text-align: center;
+    }
+
+
+    .btn-primary {
+        background-color: #4E9F3D; 
+        border-color: #4E9F3D; 
+        color: #000000; 
+    }
+
+    .btn-primary:hover {
+        background-color: #1E5128; 
+        border-color: #1E5128; 
+        color: #000000; 
+    }
+    
+    
+/* Student */
+
+    .addStudent {
+        text-align: left;
+        max-width: 60%;
+        margin: 0  auto; /* Add this line to center the form horizontally */
+        padding: 10px;
+        background-color: #a1aeba;
+        border-radius: 10px;
+        background-color: lightgray;
+    }
+
+    .deleteStudent {
+        text-align: left;
+        max-width: 60%;
+        margin: 0  auto; /* Add this line to center the form horizontally */
+        padding: 10px;
+        padding-bottom: 20px;
+        background-color: #a1aeba;
+        border-radius: 10px;
+        background-color: lightgray;
+    }
+
+    .deleteStudentSelector {
+        margin-left: 150px;
+        height: 38px;
+        border-radius: 5px;
+    }
+
+    #deleteStudentButton {
+        margin-left: 25px;
+        width: 150px;
+        margin-top: -5px;
+    }
+    
+/* Employee */
+
+.addEmployee {
+    text-align: left;
+    max-width: 60%;
+    margin: 0  auto; /* Add this line to center the form horizontally */
+    padding: 10px;
+    background-color: #a1aeba;
+    border-radius: 10px;
+    background-color: lightgray;
+}
+
+.deleteEmployee {
+    text-align: left;
+    max-width: 60%;
+    margin: 0  auto; /* Add this line to center the form horizontally */
+    padding: 10px;
+    padding-bottom: 20px;
+    background-color: #a1aeba;
+    border-radius: 10px;
+    background-color: lightgray;
+}
+
+.deleteEmployeeSelector {
+    margin-left: 160px;
+    height: 38px;
+    border-radius: 5px;
+}
+
+#deleteEmployeeButton {
+    margin-left: 25px;
+    width: 150px;
+    margin-top: -5px;
+}
+
+
+/* Users */
+
+.deleteUser {
+    text-align: left;
+    max-width: 60%;
+    margin: 0  auto; /* Add this line to center the form horizontally */
+    padding: 10px;
+    padding-bottom: 10px;
+    background-color: #a1aeba;
+    border-radius: 10px;
+    background-color: lightgray;
+}
+
+.deleteUserSelector {
+    margin-left: 180px;
+    height: 38px;
+    border-radius: 5px;
+}
+
+#deleteUserButton {
+    margin-left: 335px;       
+    width: 150px;
+    margin-top: -66px;
+    
+}
+/* Classes */
+   
+.addClass {
+    text-align: left;
+    max-width: 60%;
+    margin: 0  auto; /* Add this line to center the form horizontally */
+    padding: 10px;
+    background-color: #a1aeba;
+    border-radius: 10px;
+    background-color: lightgray;
+}
+
+.addClassPeriodSelector {
+    border-radius: 5px;
+}
+
+.addClassEmployeeSelector {
+    margin-top: -62px;
+    margin-left: 80px;
+}
+
+.classPeriodSelector {
+    border-radius: 5px;
+    width: 50px;
+    height: 38px
+}
+
+.classEmployeeSelector {
+    border-radius: 5px;
+    height: 38px;
+}
+
+#addClassButton {
+    width: 300px;
+    margin-top: -66px;
+    margin-left: 350px;
+}
+
+.deleteClass {
+    text-align: left;
+    max-width: 60%;
+    margin: 0  auto; /* Add this line to center the form horizontally */
+    padding: 10px;
+    padding-bottom: 10px;
+    background-color: #a1aeba;
+    border-radius: 10px;
+    background-color: lightgray;
+}
+
+.deleteClassSelector {
+    margin-left: 180px;
+    height: 38px;
+    border-radius: 5px;
+}
+
+#deleteClassButton {
+    margin-left: 335px;       
+    width: 150px;
+    margin-top: -112px;
+    
+}
+
+/* Enrollments */
+    
+.addEnrollment {
+    text-align: left;
+    max-width: 60%;
+    margin: 0  auto; /* Add this line to center the form horizontally */
+    padding: 10px;
+    background-color: #a1aeba;
+    border-radius: 10px;
+    background-color: lightgray;
+}
+
+.chooseStudentSelector {
+    border-radius: 5px;
+    height: 38px;
+}
+
+.chooseClassSelector {
+    border-radius: 5px;
+    height: 38px;
+}
+
+
+.deleteEnrollment {
+    text-align: left;
+    max-width: 60%;
+    margin: 0  auto; /* Add this line to center the form horizontally */
+    padding: 10px;
+    padding-bottom: 10px;
+    background-color: #a1aeba;
+    border-radius: 10px;
+    background-color: lightgray;
+}
+
+.deleteEnrollmentSelector {
+    margin-left: 180px;
+    height: 38px;
+    border-radius: 5px;
+}
+
+#deleteEnrollmentButton {       
+    width: 150px;
+}
+
+
+/* other */
+
+
+
+.flashes {
+    list-style: none;
+}
+
+.student_added, .student_deleted {
+    color: green;
+    text-align: center;
+}
+
+.student_not_found {
+    color: red;
+}
+
+    </style>
+
+
+{% endblock content %}

@@ -1,0 +1,283 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="inquireHeader">
+    <div class="user_info">
+        <h2>Inquire Page Content</h2>
+        <p>Hello, {{ first_name | capitalize }} </p>
+        <p>Your User ID: {{ user_id }} </p>
+    </div>
+</div>
+
+
+<div class="adminButton">
+    <form method="post" action="/go-admin">
+        <input type="submit" id="adminButton" value="Admin" class="btn btn-primary" name="button" size="10px">
+    </form>
+</div>
+
+<div class="backButton">
+    <input type="submit" id="backButton" value="Back" onclick="goBack()" class="btn btn-primary" name="button" size="10px">
+</div>
+
+
+<div class="homeButton">
+    <form method="post" action="/go-home">
+        <input type="submit" id="homeButton" value="Home" class="btn btn-primary" name="button" size="10px">
+    </form>
+</div>
+
+
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
+
+<div class="inquire">
+
+
+<div class="searchItems">
+    <div id="categorySelector" class="form-group">
+        <input type="button" value="Students" class="btn btn-primary" onclick="showStudentsForm()">
+        <input type="button" value="Employees"class="btn btn-primary" onclick="showEmployeesForm()">
+        <input type="button" value="Classes" class="btn btn-primary" onclick="showClassesForm()">
+    </div>
+</div>
+
+
+
+<!-- ACTION SELECTION ------------------------------------------------------------- -->
+
+
+<!-- Form for Viewing All Students -->
+
+<div class="viewAllForm" id="viewAllStudentsForm" style="display: none;">
+    <h3 class="actionTitle">All Students</h3>
+    {% for student in student_data %}
+        <form method="post" action="/student_profile">
+            <ul>
+                <li class="viewAllItems">
+                    <p class="studentsEmail">{{ student.student_email }}</p>
+                    <input type="hidden" name="student_id" value="{{ student.student_id }}">
+                    <input type="submit" id="studentsButton" class="btn btn-primary" value="{{ student.first_name + ' ' + student.last_name }}" name="button" size="10px">
+                </li>
+            </ul>
+        </form>
+    {% endfor %}
+</div>
+
+
+
+<!-- Form for Viewing All Employees -->
+
+<div class="viewAllForm" id="viewAllEmployeesForm" style="display: none;">
+    <h3 class="actionTitle">All Employees</h3>
+    {% for employee in employee_data %}
+        <form method="post" action="/employee_profile">
+            <ul>
+                <li class="viewAllItems">
+                    <p class="employeesJob">{{ employee.job }}</p>
+                    <input type="hidden" name="employee_id" value="{{ employee.employee_id }}">
+                    <input type="submit" id="employeesButton" class="btn btn-primary" value="{{ employee.first_name + ' ' + employee.last_name }}" name="button" size="10px">
+                </li>
+            </ul>
+        </form>
+    {% endfor %}
+</div>
+
+
+
+<!-- Form for Viewing All Classes -->
+
+<div class="viewAllForm" id="viewAllClassesForm" style="display: none;">
+    <h3 class="actionTitle">All Classes</h3>
+        {% for class in class_data %}
+        {% for employee in employee_data %} 
+            {% if class.class_id == employee.class_id %}
+                <form method="post" action="/class_profile">
+                    <ul>
+                        <li class="viewAllItems">
+                            <p class="classEmployee">{{ employee.first_name + ' ' + employee.last_name }}</p>
+                            <input type="hidden" name="class_id" value="{{ class.class_id }}">
+                            <input type="submit" id="classesButton" class="btn btn-primary" value="{{ class.class_name }}" name="button" size="10px">
+                        </li>
+                    </ul>
+                </form>
+            {% endif %}
+        {% endfor %}
+        {% endfor %}
+</div>
+
+
+</div>
+
+
+
+<style>
+
+
+.btn-primary {
+    background-color: #4E9F3D; 
+    border-color: #4E9F3D; 
+    color: #000000; 
+}
+
+.btn-primary:hover {
+    background-color: #1E5128; 
+    border-color: #1E5128; 
+    color: #000000; 
+}
+
+#homeButton, #backButton, #adminButton {
+    width: 60%;
+    justify-content: center;
+    background-color: #515151;
+}
+
+
+.homeButton, .backButton, .adminButton {
+    width: 300%;
+    padding: 10px;
+    max-width: 10%;
+    border-radius: 20px;
+    margin-left: 20%;
+}
+
+.backButton {
+    margin-left: 26%;
+    margin-bottom: -3.3%;
+}
+
+.adminButton {
+    margin-left: 32%;
+    margin-bottom: -3.3%;
+}
+
+.searchItems {
+    text-align: center;
+    align-items: center;
+    max-width: 60%;
+    max-height: 120px;
+    margin: 0 auto; /* Add this line to center the form horizontally */
+    padding: 30px;
+    background-color: #a1aeba;
+    border-radius: 10px;
+    background-color: lightgray;
+}
+
+
+.actionTitle {
+    text-align: center;
+    align-items: center;    
+    max-width: 40%;
+    max-height: 120px;
+    margin: 10px auto; /* Add this line to center the form horizontally */
+    padding: 10px;
+    background-color: #a1aeba;
+    border-radius: 10px;
+    background-color: lightgray;
+}
+
+.itemsDropdown {
+    text-align: center;
+    align-items: center;    
+    max-width: 40%;
+    max-height: 120px;
+    margin: 10px auto; /* Add this line to center the form horizontally */
+    padding: 10px;
+    background-color: #a1aeba;
+    border-radius: 10px;
+    background-color: lightgray;
+}
+
+
+
+
+.viewAllForm {
+    text-align: left;
+    align-items: center;
+    margin: 0 auto; /* Add this line to center the form horizontally */
+}
+
+
+.Title {
+    text-align: left;
+    margin: 0 auto; /* Add this line to center the form horizontally */
+}
+.viewAllItems {
+    align-items: center;
+    margin: 0 auto; /* Add this line to center the form horizontally */
+    padding: 60px;
+    background-color: #a1aeba;
+    border-radius: 10px;
+    background-color: lightgray;
+    min-width: 20%;
+    margin-top: 10px;
+}
+
+#studentsButton, #employeesButton, #classesButton {
+
+    width: 90%;
+    font-size: 1.5em; /* Adjust the font size as needed */
+    font-weight: 300;
+    background-color: #7b7b7b;
+    margin-bottom: -30%;
+}
+
+.studentsEmail, .employeesJob, .classEmployee {
+    margin-bottom: -45%;
+    margin-top: 5%;
+    margin-right: 5%;
+}
+
+.viewAllItems li {
+    text-align: left; /* Left-align the content of list items */
+    margin: 10px; /* Add margin as needed */
+}
+
+
+ul{
+    display: flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    flex-direction: column-reverse;
+}
+
+
+</style>
+
+<script>
+
+function showStudentsForm() {
+
+    viewAllStudentsForm.style.display = "block";
+    viewAllEmployeesForm.style.display = "none";
+    viewAllClassesForm.style.display = "none";
+
+}
+
+function showEmployeesForm() {
+
+    viewAllStudentsForm.style.display = "none";
+    viewAllEmployeesForm.style.display = "block";
+    viewAllClassesForm.style.display = "none";
+
+}
+
+function showClassesForm() {    
+
+    viewAllStudentsForm.style.display = "none";
+    viewAllEmployeesForm.style.display = "none";
+    viewAllClassesForm.style.display = "block";
+
+}
+
+
+</script>
+
+
+
+{% endblock content %}

@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Employee Profile -->
+
+<div class="Profile">
+    <div class="innerProfile">
+        <div class="Name">
+            <h1>{{found_class.class_name}}</h1>
+        </div>
+        <div class="Teacher">
+            <p>{{found_employee.first_name + " " + found_employee.last_name}}</p>
+        </div>
+        <div class="Period">
+            <p>{{ "Period " + found_class.period | string }}</p>
+        </div>
+        <div class="classEnrollments">
+            {% if enrollment_found %}
+                <ul>
+                    <li class="viewAllItems">
+                        <h5>{{ "Enrollments" }}</h5>
+                        {% for enrollment in found_enrollment_data %}
+                            {% for student in student_data %}
+                                {% if enrollment.student_id == student.student_id %}
+                                    <p><a href="/student_profile?student_id={{ student.student_id }}">{{ student.first_name + " " + student.last_name }}</a></p>
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </li>
+                </ul>
+            {% else %}
+                <div class="noEnrollmentsFound">
+                    <h5>No Enrollments Found</h5>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+
+
+    .Profile {
+        text-align: center;
+        align-items: center;
+        max-width: 40%;
+        margin: 0 auto; /* Add this line to center the form horizontally */
+        padding: 10px;
+        background-color: #a1aeba;
+        border-radius: 10px;
+        background-color: rgb(83, 83, 83);
+        margin-top: 200px; 
+    }
+
+    .innerProfile {
+        min-width: 40%;
+    }
+
+
+    .Name {
+        display: flex;
+        padding: 10px;
+        background-color: #a1aeba;
+        margin: 10px;
+        border-radius: 10px;
+        background-color: lightgray;
+        min-width: 40%;   
+    }
+
+
+    .Teacher {
+        display: flex;
+        padding: 10px;
+        background-color: #a1aeba;
+        margin: 10px;
+        border-radius: 10px;
+        background-color: lightgray;
+        min-width: 20%; 
+        max-height: 50px;  
+    }
+
+
+    .viewAllItems, .noEnrollmentsFound {
+        padding: 10px;
+        background-color: #a1aeba;
+        margin: 10px;
+        border-radius: 10px;
+        background-color: lightgray;
+        min-width: 20%;
+    }
+    
+    ul{
+        display: flex;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        flex-direction: column-reverse;
+    }
+    
+
+
+</style>
+
+{% endblock content %}

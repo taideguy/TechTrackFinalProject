@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Student Profile -->
+
+<div class="Profile">
+    <div class="innerProfile">
+        <div class="Name">
+            <h1>{{found_student.first_name + ' ' + found_student.last_name}}</h1>
+        </div>
+        <div class="Email">
+            <p>{{found_student.student_email}}</p>
+        </div>
+        <div class="Grade">
+            <p>{{ "Grade: " + found_student.grade | string }}</p>
+        </div>
+        <div class="Enrollments">
+            {% if enrollment_found %}
+                <ul>
+                    <li class="viewAllItems">
+                        <h5>{{ "Enrollments" }}</h5>
+                        {% for enrollment in found_enrollment_data %}
+                            {% for class in found_class_data %}
+                                {% if enrollment.class_id == class.class_id %}
+                                    <p><a href="/class_profile?class_id={{ class.class_id }}">{{ class.class_name ~ " | p" ~ class.period | string }}</a></p>
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </li>
+                </ul>
+            {% else %}
+                <div class="noEnrollmentsFound">
+                    <h5>No Enrollments Found</h5>
+                </div>
+            {% endif %}
+        </div>    
+
+    </div>
+    
+
+
+</div>
+
+<style>
+
+
+    .Profile {
+        text-align: center;
+        align-items: center;
+        max-width: 40%;
+        margin: 0 auto; /* Add this line to center the form horizontally */
+        padding: 10px;
+        background-color: #a1aeba;
+        border-radius: 10px;
+        background-color: rgb(83, 83, 83);
+        margin-top: 200px; 
+    }
+
+    .innerProfile {
+        min-width: 40%;
+    }
+
+    .Name {
+        display: flex;
+        padding: 10px;
+        background-color: #a1aeba;
+        margin: 10px;
+        border-radius: 10px;
+        background-color: lightgray;
+        min-width: 40%;   
+    }
+
+    .Email {
+        display: flex;
+        padding: 10px;
+        background-color: #a1aeba;
+        margin: 10px;
+        border-radius: 10px;
+        background-color: lightgray;
+        min-width: 20%; 
+        max-height: 50px;  
+    }
+
+    .viewAllItems, .noEnrollmentsFound {
+        padding: 10px;
+        background-color: #a1aeba;
+        margin: 10px;
+        border-radius: 10px;
+        background-color: lightgray;
+        min-width: 20%;
+    }
+
+    .Grade {
+        display: flex;
+        padding: 10px;
+        background-color: #a1aeba;
+        margin: 10px;
+        border-radius: 10px;
+        background-color: lightgray;
+        min-width: 20%; 
+        max-height: 50px;
+    }
+    
+
+    ul{
+        display: flex;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        flex-direction: column-reverse;
+    }
+    
+    
+
+</style>
+
+{% endblock content %}

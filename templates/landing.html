@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<div class="landingOptions">
+    
+        <form method="post" action="/go-login">
+            <input type="submit" id="loginButton" value="Login" class="btn btn-primary" name="button" size="10px">
+        </form>
+   
+    
+    
+        <form method="post" action="/go-signup">
+            <input type="submit" id="signupButton" value="Signup" class="btn btn-primary" name="button" size="10px">
+        </form>
+    
+</div>
+
+
+<style>
+
+    .btn-primary {
+        background-color: #4E9F3D; 
+        border-color: #4E9F3D;
+        border-width: 2px; 
+        color: #000000; 
+    }
+    
+    .btn-primary:hover {
+        background-color: #1E5128; 
+        border-color: #1E5128; 
+        color: #000000; 
+    }
+
+    #loginButton, #signupButton {
+        width: 40%;
+        height: 100%;
+        justify-content: center;
+        background-color: #515151;
+    }
+
+    #loginButton, #signupButton {
+        padding: 10px;
+        border-radius: 20px;
+    }
+
+    #loginButton {
+        margin-left: 5%;
+        margin-top: 5%;  
+    }
+
+    #signupButton {
+        margin-left: 55%;
+        margin-top: -12%;  
+    }
+
+    .landingOptions {
+        background-color: lightgray;
+        text-align: left;
+        max-width: 40%;
+        padding: 50px;
+        border-radius: 30px;
+        align-items: center;
+        margin: 0 auto; /* Add this line to center the form horizontally */
+    }
+
+</style>
+
+
+{% endblock content %}

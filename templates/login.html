@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+
+<div class="loginForm">
+    <form method="post">
+        <div class="form-group">
+            <label for="email">Email address:</label>
+            <input type="email" class="form-control" name="email" >
+            <br>
+            <div class="email_error">
+                {% include 'login_email_error_flash.html' %}
+            </div>
+            <br>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" class="form-control" name="password" >
+            <br>
+            <div class="password_error">
+                {% include 'login_password_error_flash.html' %}
+            </div>
+            <input type="submit" value="Login" class="btn btn-primary" name="button" size="10px">
+            <br>
+        </div>  
+       
+    </form>
+
+</div>
+
+
+<style>
+
+.title {
+    outline-color: lightslategray;
+    outline-width: 2px;
+}
+
+
+.flashes {
+    list-style: none;
+}
+
+.email_error, .password_error {
+    color: red;
+}
+
+
+.loginForm {
+    text-align: left;
+    max-width: 40%;
+    margin: 20%  auto; /* Add this line to center the form horizontally */
+    padding: 10px;
+    background-color: #a1aeba;
+    border-radius: 10px;
+    background-color: lightgray;
+}
+
+.btn-primary {
+    width: 300px;
+    
+}
+
+
+
+
+</style>
+
+{% endblock content %}
